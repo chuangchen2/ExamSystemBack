@@ -35,10 +35,10 @@ public class ServiceHandler {
                 }
                 setUser(reuturnedUser);
                 System.err.println(reuturnedUser);
-                ioHandler.writeln("2 " + user.getUserID());
+                ioHandler.writeln("L1 " + user.getUserID());
             } catch (LoginFailureException e) {
                 logger.error(e);
-                ioHandler.writeln("1");
+                ioHandler.writeln("L2");
             } catch (IllegalStateException illegalStateException) {
                 logger.error(illegalStateException);
             }
