@@ -1,4 +1,4 @@
-# ExamSystemFront
+# ExamSystemBack
 Java程序设计期末大作业，一个C/S做题系统后端
 ## 如何使用
 使用maven加载依赖后直接使用，使用8888端口
