@@ -8,6 +8,7 @@ import java.sql.*;
 
 import org.apache.log4j.Logger;
 
+
 public class UserDao {
     private Connection connection = null;
     private PreparedStatement statement = null;
@@ -24,12 +25,12 @@ public class UserDao {
     public User insertUser(String username, String password, String groupid) {
         try {
             connection = DataBaseUtil.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO exam_user (userid, username, userpassword, groupid) VALUES (?,?,?,?)",
+            statement= connection.prepareStatement("INSERT INTO exam_user (userid, username, userpassword, groupid) VALUES (?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, null);
-            preparedStatement.setString(2, username);
-            preparedStatement.setString(3, password);
-            preparedStatement.setString(4, groupid);
+            statement.setString(1, null);
+            statement.setString(2, username);
+            statement.setString(3, password);
+            statement.setString(4, groupid);
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             String generatedKey = "";
@@ -45,6 +46,8 @@ public class UserDao {
         } catch (SQLException e) {
             logger.error("创建用户失败");
             logger.error(e);
+        } finally {
+            DataBaseUtil.release(connection, statement, resultSet);
         }
         return null;
     }
@@ -59,6 +62,8 @@ public class UserDao {
             return resultSet.getString(1);
         } catch (SQLException e) {
             logger.error(e);
+        } finally {
+            DataBaseUtil.release(connection, statement, resultSet);
         }
         return "";
     }
