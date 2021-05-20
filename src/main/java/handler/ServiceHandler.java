@@ -17,7 +17,7 @@ public class ServiceHandler {
     private Socket socket;
     private User user;
     private IOHandler ioHandler;
-    private static Logger logger = Logger.getLogger(ServiceHandler.class);
+    private static final Logger logger = Logger.getLogger(ServiceHandler.class);
     private boolean logined;
 
     public ServiceHandler() {
@@ -65,7 +65,11 @@ public class ServiceHandler {
                 }
             } catch (RegisterFailException e) {
                 logger.error(e);
-                ioHandler.writeln("R2");
+                if (e.getMessage().equals("java.sql.SQLIntegrityConstraintViolationException")) {
+                    ioHandler.writeln("R2");
+                } else {
+                    ioHandler.writeln("R3");
+                }
             } catch (IllegalStateException e) {
                 logger.error("注册命令格式错误");
                 logger.error(e);

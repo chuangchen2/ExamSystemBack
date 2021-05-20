@@ -18,11 +18,11 @@ public class UserDao {
     public UserDao() {
     }
 
-    public User insertUser(String username, String password) {
+    public User insertUser(String username, String password) throws Exception{
         return insertUser(username, password, "1");
     }
 
-    public User insertUser(String username, String password, String groupid) {
+    public User insertUser(String username, String password, String groupid) throws Exception{
         try {
             connection = DataBaseUtil.getConnection();
             statement= connection.prepareStatement("INSERT INTO exam_user (userid, username, userpassword, groupid) VALUES (?,?,?,?)",
@@ -38,21 +38,16 @@ public class UserDao {
                 generatedKey = resultSet.getString(1);
             }
             if (generatedKey.equals("")) {
-                logger.error("创建用户失败");
-                logger.error(new SQLException());
+                throw new SQLException();
             } else {
                 return FactoryUtil.userFactor(generatedKey, username, password, groupid);
             }
-        } catch (SQLException e) {
-            logger.error("创建用户失败");
-            logger.error(e);
         } finally {
             DataBaseUtil.release(connection, statement, resultSet);
         }
-        return null;
     }
 
-    public String getPassword(String username) {
+    public String getPassword(String username) throws SQLException {
         try {
             connection = DataBaseUtil.getConnection();
             statement = connection.prepareStatement("SELECT userpassword FROM exam_user WHERE username=?");
@@ -60,15 +55,12 @@ public class UserDao {
             resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getString(1);
-        } catch (SQLException e) {
-            logger.error(e);
         } finally {
             DataBaseUtil.release(connection, statement, resultSet);
         }
-        return "";
     }
 
-    public User getUser(String username) {
+    public User getUser(String username) throws SQLException{
         try {
             connection = DataBaseUtil.getConnection();
             statement = connection.prepareStatement("SELECT userid, username, userpassword, groupid FROM exam_user WHERE username=?");
@@ -76,11 +68,8 @@ public class UserDao {
             resultSet = statement.executeQuery();
             User user = FactoryUtil.userFactory(resultSet);
             return user;
-        } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             DataBaseUtil.release(connection, statement, resultSet);
         }
-        return null;
     }
 }
