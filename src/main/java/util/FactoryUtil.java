@@ -15,4 +15,13 @@ public class FactoryUtil {
         user.setGroupID(resultSet.getString(4));
         return user;
     }
+
+    public static User userFactor(String userid, String username, String password, String groupid) {
+        User user = new User();
+        user.setUserID(userid);
+        user.setUserName(username);
+        user.setUserPassword(password);
+        user.setGroupID(groupid);
+        return user;
+    }
 }

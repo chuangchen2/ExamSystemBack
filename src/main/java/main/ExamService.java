@@ -1,6 +1,7 @@
 package main;
 
 import handler.ServiceHandler;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,12 +11,14 @@ import java.util.concurrent.Executors;
 
 public class ExamService {
     private int port = 8888;
+    private static org.apache.log4j.Logger logger = Logger.getLogger(ExamService.class);
     ServerSocket serverSocket;
     private void init() {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("serverSocket 启动失败");
+            logger.error(e);
         }
     }
     public static void main(String args[]) {
@@ -27,16 +30,15 @@ public class ExamService {
                 Socket accept = examService.serverSocket.accept();
                 executorService.execute(() -> {
                     Socket currentAccept = accept;
-                    //System.err.println("2");
+                    logger.info(currentAccept.getLocalAddress() + "已连接");
                     ServiceHandler serviceHandler = new ServiceHandler();
-                    //System.err.println("4");
                     serviceHandler.setSocket(currentAccept);
                     serviceHandler.init();
-                    //System.err.println("3");
                     serviceHandler.scheduleCommand();
                 });
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("无法与客户端连接");
+                logger.error(e);
             }
         }
     }

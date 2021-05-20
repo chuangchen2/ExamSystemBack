@@ -1,10 +1,14 @@
 package handler;
 
 import controller.loginController;
+import controller.registerController;
 import domain.User;
-import exception.LoginFailureException;
+import exception.LoginFailException;
+import exception.RegisterFailException;
 import org.apache.log4j.Logger;
 import util.RegexUtil;
+
+import java.io.EOFException;
 import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +18,7 @@ public class ServiceHandler {
     private User user;
     private IOHandler ioHandler;
     private static Logger logger = Logger.getLogger(ServiceHandler.class);
+    private boolean logined;
 
     public ServiceHandler() {
         super();
@@ -25,7 +30,6 @@ public class ServiceHandler {
 
     private void stateMachine(String command) {
         if (Pattern.matches("^login.*", command)) {
-            System.err.println(command);
             Matcher loginMatcher = RegexUtil.getLoginMatcher(command);
             loginController loginController = new loginController();
             User reuturnedUser = null;
@@ -36,11 +40,35 @@ public class ServiceHandler {
                 setUser(reuturnedUser);
                 System.err.println(reuturnedUser);
                 ioHandler.writeln("L1 " + user.getUserID());
-            } catch (LoginFailureException e) {
+                logined = true;
+            } catch (LoginFailException e) {
                 logger.error(e);
                 ioHandler.writeln("L2");
             } catch (IllegalStateException illegalStateException) {
+                logger.error("登录命令格式错误");
                 logger.error(illegalStateException);
+            }
+        }
+
+        if (Pattern.matches("^register.*", command)) {
+            Matcher registerMatcher = RegexUtil.getRegisterMatcher(command);
+            registerController registerController = new registerController();
+            try {
+                if (registerMatcher.find()) {
+                    User returned = null;
+                    if (registerMatcher.group(3).equals("")) {
+                        returned = registerController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), "1");
+                    } else {
+                        returned = registerController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), registerMatcher.group(3));
+                    }
+                    ioHandler.writeln("R1" + returned.getUserID());
+                }
+            } catch (RegisterFailException e) {
+                logger.error(e);
+                ioHandler.writeln("R2");
+            } catch (IllegalStateException e) {
+                logger.error("注册命令格式错误");
+                logger.error(e);
             }
         }
     }
@@ -48,12 +76,17 @@ public class ServiceHandler {
     public void scheduleCommand() {
         String command = "";
         while (true) {
-            command = ioHandler.readln();
-            if(command.equals("")) {
-                continue;
+            try {
+                command = ioHandler.readln();
+                if(command.equals("")) {
+                    continue;
+                }
+                System.err.println(command);
+                stateMachine(command);
+            } catch (EOFException e) {
+                ioHandler.release();
+                break;
             }
-            System.err.println(command);
-            stateMachine(command);
         }
     }
 

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 public class IOHandler {
     private static Map<Socket, IOHandler> socketPool = new HashMap<>();
     private static Logger logger = Logger.getLogger(IOHandler.class);
+    private Socket orgin;
     private OutputStream outputStream;
     private DataOutputStream dataOutputStream;
     private InputStream inputStream;
@@ -21,6 +22,7 @@ public class IOHandler {
 
     private IOHandler(Socket socket) {
         try {
+            orgin = socket;
             outputStream = socket.getOutputStream();
             dataOutputStream = new DataOutputStream(outputStream);
             inputStream = socket.getInputStream();
@@ -50,7 +52,7 @@ public class IOHandler {
         }
     }
 
-    public String readln() {
+    public String readln() throws EOFException{
         String readString = "";
         try {
             readString = bufferedReader.readLine();
@@ -67,8 +69,9 @@ public class IOHandler {
             inputStream.close();
             dataOutputStream.close();
             outputStream.close();
+            socketPool.remove(this.orgin);
         } catch (IOException ex) {
-
+            logger.error(ex);
         }
     }
 }
