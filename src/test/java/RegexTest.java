@@ -12,4 +12,12 @@ public class RegexTest {
             System.out.println(matcher.group(1));
         }
     }
+
+    @Test
+    public void test2() {
+        Matcher matcher = RegexUtil.getRegisterMatcher("register 123 123");
+        if (matcher.find()) {
+            System.out.println(matcher.group(3).equals(""));
+        }
+    }
 }

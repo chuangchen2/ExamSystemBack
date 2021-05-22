@@ -31,7 +31,7 @@ public class ServiceHandler {
     private void stateMachine(String command) {
         if (Pattern.matches("^login.*", command)) {
             Matcher loginMatcher = RegexUtil.getLoginMatcher(command);
-            loginController loginController = new loginController();
+            loginController loginController = new loginController(socket);
             User reuturnedUser = null;
             try {
                 if(loginMatcher.find()) {
@@ -39,20 +39,18 @@ public class ServiceHandler {
                 }
                 setUser(reuturnedUser);
                 System.err.println(reuturnedUser);
-                ioHandler.writeln("L1 " + user.getUserID());
                 logined = true;
-            } catch (LoginFailException e) {
-                logger.error(e);
-                ioHandler.writeln("L2");
             } catch (IllegalStateException illegalStateException) {
-                logger.error("登录命令格式错误");
-                logger.error(illegalStateException);
+                ioHandler.writeln("L3");
+                logger.info("登录命令格式错误");
+                logger.info(illegalStateException);
+            } catch (LoginFailException e) {
             }
         }
 
         if (Pattern.matches("^register.*", command)) {
             Matcher registerMatcher = RegexUtil.getRegisterMatcher(command);
-            registerController registerController = new registerController();
+            registerController registerController = new registerController(socket);
             try {
                 if (registerMatcher.find()) {
                     User returned = null;
@@ -61,18 +59,10 @@ public class ServiceHandler {
                     } else {
                         returned = registerController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), registerMatcher.group(3));
                     }
-                    ioHandler.writeln("R1" + returned.getUserID());
-                }
-            } catch (RegisterFailException e) {
-                logger.error(e);
-                if (e.getMessage().equals("java.sql.SQLIntegrityConstraintViolationException")) {
-                    ioHandler.writeln("R2");
-                } else {
-                    ioHandler.writeln("R3");
                 }
             } catch (IllegalStateException e) {
-                logger.error("注册命令格式错误");
-                logger.error(e);
+                logger.info("注册命令格式错误");
+                logger.info(e);
             }
         }
     }
