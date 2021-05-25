@@ -2,6 +2,7 @@ package handler;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,10 +53,10 @@ public class IOHandler {
         }
     }
 
-    public String readln() throws EOFException{
+    public String readln() throws EOFException, SocketException {
         String readString = "";
         try {
-            readString = bufferedReader.readLine();
+            readString = dataInputStream.readUTF();
         } catch (IOException e) {
             logger.error(e);
         }

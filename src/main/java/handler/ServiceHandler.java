@@ -1,15 +1,14 @@
 package handler;
 
-import controller.loginController;
-import controller.registerController;
+import controller.UserController;
 import domain.User;
 import exception.LoginFailException;
-import exception.RegisterFailException;
 import org.apache.log4j.Logger;
 import util.RegexUtil;
 
 import java.io.EOFException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,39 +30,60 @@ public class ServiceHandler {
     private void stateMachine(String command) {
         if (Pattern.matches("^login.*", command)) {
             Matcher loginMatcher = RegexUtil.getLoginMatcher(command);
-            loginController loginController = new loginController(socket);
+            UserController userController = new UserController(socket);
             User reuturnedUser = null;
             try {
                 if(loginMatcher.find()) {
-                    reuturnedUser = loginController.SocketLogin(loginMatcher.group(1), loginMatcher.group(2));
+                    reuturnedUser = userController.socketLogin(loginMatcher.group(1), loginMatcher.group(2));
                 }
                 setUser(reuturnedUser);
                 System.err.println(reuturnedUser);
                 logined = true;
             } catch (IllegalStateException illegalStateException) {
-                ioHandler.writeln("L3");
+                ioHandler.writeln("FE");
                 logger.info("登录命令格式错误");
                 logger.info(illegalStateException);
             } catch (LoginFailException e) {
             }
         }
 
-        if (Pattern.matches("^register.*", command)) {
+        else if (Pattern.matches("^register.*", command)) {
             Matcher registerMatcher = RegexUtil.getRegisterMatcher(command);
-            registerController registerController = new registerController(socket);
+            UserController userController = new UserController(socket);
             try {
                 if (registerMatcher.find()) {
                     User returned = null;
                     if (registerMatcher.group(3).equals("")) {
-                        returned = registerController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), "1");
+                        returned = userController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), "1");
                     } else {
-                        returned = registerController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), registerMatcher.group(3));
+                        returned = userController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), registerMatcher.group(3));
                     }
                 }
             } catch (IllegalStateException e) {
+                ioHandler.writeln("FE");
                 logger.info("注册命令格式错误");
                 logger.info(e);
             }
+        }
+
+        else if(command.equals("getcourses") && user != null) {
+            UserController userController = new UserController(socket);
+            userController.socketGetCourses(user);
+        }
+
+        else if(Pattern.matches("^updatepassword.*", command) && logined) {
+            Matcher updatePasswordMatcher = RegexUtil.getUpdatePasswordMatcher(command);
+            UserController userController = new UserController(socket);
+            if (updatePasswordMatcher.find()) {
+                String oldPassword =  updatePasswordMatcher.group(1);
+                String newPassword = updatePasswordMatcher.group(2);
+                userController.socketUpdatePassword(user, oldPassword, newPassword);
+            }
+        }
+
+        else {
+            ioHandler.writeln("FE");
+            logger.info("命令格式错误");
         }
     }
 
@@ -77,7 +97,7 @@ public class ServiceHandler {
                 }
                 System.err.println(command);
                 stateMachine(command);
-            } catch (EOFException e) {
+            } catch (EOFException | SocketException e) {
                 ioHandler.release();
                 break;
             }
