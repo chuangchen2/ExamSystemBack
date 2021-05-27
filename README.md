@@ -6,23 +6,23 @@ Java程序设计期末大作业，一个C/S做题系统后端
 命令格式错误返回`FE`
 ### 用户信息
 #### 登录
-* 登录命令`login 用户名 密码`
-* 登录成功返回`L1 {groupName=, groupID=, userName=, userID=}`
+* 命令格式`login 用户名 密码`
+* 成功返回`L1 {groupName=, groupID=, userName=, userID=}`
 * 用户名或密码错误返回`L2`
 #### 注册
-* 注册命令`register 用户名 密码 [用户组ID]`
-* 登录成功返回`R1 UserID`
+* 命令格式`register 用户名 密码 [用户组ID]`
+* 成功返回`R1 UserID`
 * 用户名重复返回`R2`
 * 其他错误返回`R3`
 #### 更改密码
-* 更改密码`updatepassword 旧密码 新密码`
-* 修改成功返回`UP1`
+* 命令格式`updatepassword 旧密码 新密码`
+* 成功返回`UP1`
 * 旧密码错误返回`UP2`
 * 其他错误返回`UP3`
 ### 课程信息
 #### 查询登录用户的课程信息
-* `getcourses`
-* 返回json格式的list\<map>
+* 命令格式`getcourses`
+* 成功返回`GC1`+数据，格式格式为
 ```javascript
 [
     {
@@ -32,10 +32,10 @@ Java程序设计期末大作业，一个C/S做题系统后端
     }
 ]
 ```
+* 错误返回`GC2`
 #### 获取题目
 * 命令格式`getquestions 题库id`
-* 返回`GQ1\n(data)`
-* 数据格式为
+* 返回`GQ1`+数据，数据格式为
 ```javascript
 [
     {
@@ -44,6 +44,7 @@ Java程序设计期末大作业，一个C/S做题系统后端
     }
 ]
 ```
+* 错误返回`GQ2`
 ## TODO
 * 管理员功能
 * 提交分数

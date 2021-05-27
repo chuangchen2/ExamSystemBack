@@ -31,13 +31,14 @@ public class UserController {
             List<Map<String, String>> courses = userDao.getCourses(user);
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(courses);
+            ioHandler.writeln("GC1");
             ioHandler.writeln(json);
             return true;
         } catch (SQLException e) {
-            ioHandler.writeln("QE1");
+            ioHandler.writeln("GC2");
             logger.error(e);
         } catch (JsonProcessingException e) {
-            ioHandler.writeln("QE1");
+            ioHandler.writeln("GC2");
             logger.info(e);
         }
         return false;
