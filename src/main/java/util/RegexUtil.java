@@ -4,13 +4,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexUtil {
-    public static Pattern loginPattern;
-    public static Pattern registerPattern;
-    public static Pattern updatePasswordPattern;
+    private static Pattern loginPattern;
+    private static Pattern registerPattern;
+    private static Pattern updatePasswordPattern;
+    private static Pattern questionsPattern;
     static {
         loginPattern = Pattern.compile("login\\s([^\\s]*)\\s([^\\s]*)");
         registerPattern = Pattern.compile("register\\s([^\\s]*)\\s([^\\s]*)\\s?([^\\s]*)?");
         updatePasswordPattern = Pattern.compile("updatepassword\\s([^\\s]*)\\s([^\\s]*)");
+        questionsPattern = Pattern.compile("getquestion\\s([^\\s]*)");
     }
 
     public static Matcher getLoginMatcher(String string) {
@@ -23,5 +25,9 @@ public class RegexUtil {
     
     public static Matcher getUpdatePasswordMatcher(String string) {
         return updatePasswordPattern.matcher(string);
+    }
+
+    public static Matcher getQuestionsMatcher(String string) {
+        return questionsPattern.matcher(string);
     }
 }

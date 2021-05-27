@@ -1,12 +1,15 @@
 package handler;
 
+import controller.CourseController;
 import controller.UserController;
+import dao.CourseDao;
 import domain.User;
 import exception.LoginFailException;
 import org.apache.log4j.Logger;
 import util.RegexUtil;
 
 import java.io.EOFException;
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.regex.Matcher;
@@ -81,6 +84,14 @@ public class ServiceHandler {
             }
         }
 
+        else if(Pattern.matches("^getquestions.*", command) && logined) {
+            CourseController courseController = new CourseController(socket);
+            Matcher questionsMatcher = RegexUtil.getQuestionsMatcher(command);
+            if (questionsMatcher.find()) {
+                courseController.getQuestions(questionsMatcher.group(1));
+            }
+        }
+
         else {
             ioHandler.writeln("FE");
             logger.info("命令格式错误");
@@ -97,7 +108,7 @@ public class ServiceHandler {
                 }
                 System.err.println(command);
                 stateMachine(command);
-            } catch (EOFException | SocketException e) {
+            } catch (IOException e) {
                 ioHandler.release();
                 break;
             }

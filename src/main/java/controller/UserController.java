@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,15 @@ public class UserController {
         try {
             if (password.equals(userDao.getPassword(username))) {
                 User user = userDao.getUser(username);
-                ioHandler.writeln("L1 " + user.getUserID());
+                Map<String, String> ret = new HashMap<>();
+                ret.put("userID", user.getUserID());
+                ret.put("userName", user.getUserName());
+                ret.put("groupID", user.getGroupID());
+                ret.put("groupName", user.getGroupName());
+                ObjectMapper mapper = new ObjectMapper();
+                String s = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(ret);
+                ioHandler.writeln("L1");
+                ioHandler.writeln(s);
                 logger.info(user + "登录成功");
                 return userDao.getUser(username);
             } else {
@@ -58,6 +67,8 @@ public class UserController {
             logger.error(e);
             ioHandler.writeln("L4");
             throw new LoginFailException();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
         return null;
     }

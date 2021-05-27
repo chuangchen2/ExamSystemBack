@@ -13,11 +13,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 
-public class UserDao {
-    private Connection connection = null;
-    private PreparedStatement statement = null;
-    private ResultSet resultSet = null;
-    private static Logger logger = Logger.getLogger(UserDao.class);
+public class UserDao extends AbstractDao {
+    static {
+        logger = Logger.getLogger(UserDao.class);
+    }
 
     public UserDao() {
     }
@@ -114,6 +113,9 @@ public class UserDao {
             statement.setString(1, username);
             resultSet = statement.executeQuery();
             User user = FactoryUtil.userFactory(resultSet);
+            GroupDao groupDao = new GroupDao();
+            String groupName = groupDao.getGroupName(user.getGroupID());
+            user.setGroupName(groupName);
             return user;
         } finally {
             DataBaseUtil.release(connection, statement, resultSet);

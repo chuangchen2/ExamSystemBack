@@ -7,7 +7,7 @@ Java程序设计期末大作业，一个C/S做题系统后端
 ### 用户信息
 #### 登录
 * 登录命令`login 用户名 密码`
-* 登录成功返回`L1 UserID`
+* 登录成功返回`L1 {groupName=, groupID=, userName=, userID=}`
 * 用户名或密码错误返回`L2`
 #### 注册
 * 注册命令`register 用户名 密码 [用户组ID]`
@@ -26,15 +26,26 @@ Java程序设计期末大作业，一个C/S做题系统后端
 ```javascript
 [
     {
-        "coursename":"课程名称"//(String),
-        "finished":"是否完成"//(String),
+        "coursename":"课程名称",//(String),
+        "finished":"是否完成",//(String),
         "score":"分数"//(String),
+    }
+]
+```
+#### 获取题目
+* 命令格式`getquestions 题库id`
+* 返回`GQ1\n(data)`
+* 数据格式为
+```javascript
+[
+    {
+        "type":"string",//0选择题， 1选择题
+        "items":"List<List<String>>"//
     }
 ]
 ```
 ## TODO
 * 管理员功能
-* 发放题目
 * 提交分数
 * 修改信息
 * 考试时间

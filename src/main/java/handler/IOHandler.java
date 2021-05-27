@@ -47,19 +47,17 @@ public class IOHandler {
 
     public void writeln(String string) {
         try {
-            dataOutputStream.writeUTF(string + "\n");
+            dataOutputStream.writeUTF(string);
+            dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e);
+            System.err.println("1");
         }
     }
 
-    public String readln() throws EOFException, SocketException {
+    public String readln() throws IOException {
         String readString = "";
-        try {
-            readString = dataInputStream.readUTF();
-        } catch (IOException e) {
-            logger.error(e);
-        }
+        readString = dataInputStream.readUTF();
         return readString;
     }
 
@@ -72,6 +70,7 @@ public class IOHandler {
             outputStream.close();
             socketPool.remove(this.orgin);
         } catch (IOException ex) {
+            System.err.println("3");
             logger.error(ex);
         }
     }
