@@ -8,11 +8,13 @@ public class RegexUtil {
     private static Pattern registerPattern;
     private static Pattern updatePasswordPattern;
     private static Pattern questionsPattern;
+    private static Pattern postScorePattern;
     static {
         loginPattern = Pattern.compile("login\\s([^\\s]*)\\s([^\\s]*)");
         registerPattern = Pattern.compile("register\\s([^\\s]*)\\s([^\\s]*)\\s?([^\\s]*)?");
         updatePasswordPattern = Pattern.compile("updatepassword\\s([^\\s]*)\\s([^\\s]*)");
         questionsPattern = Pattern.compile("getquestion\\s([^\\s]*)");
+        postScorePattern = Pattern.compile("postscore\\s([^\\s]*)\\s([^\\s]*)");
     }
 
     public static Matcher getLoginMatcher(String string) {
@@ -29,5 +31,9 @@ public class RegexUtil {
 
     public static Matcher getQuestionsMatcher(String string) {
         return questionsPattern.matcher(string);
+    }
+
+    public static Matcher getPostScoreMatcher(String command) {
+        return postScorePattern.matcher(command);
     }
 }

@@ -29,7 +29,7 @@ public class CourseTest {
     public void test2() throws IOException {
         CourseDao courseDao = new CourseDao();
         Course course = new Course();
-        course.setPath("./src/main/resources/storage/jisuanjiwangluo.json");
+        course.setPath("storage/jisuanjiwangluo.json");
         String questionJsonString = courseDao.getQuestionJsonString(course);
         ObjectMapper mapper = new ObjectMapper();
         List<Question> questions = mapper.readValue(questionJsonString, new TypeReference<List<Question>>() {

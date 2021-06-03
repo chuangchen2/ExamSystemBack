@@ -1,18 +1,19 @@
 package dao;
 
 import domain.Course;
-import domain.User;
 import util.DataBaseUtil;
 import util.FactoryUtil;
 
 import java.io.*;
+import java.net.URL;
 import java.sql.SQLException;
 
 public class CourseDao extends AbstractDao {
 
     public String getQuestionJsonString(Course course) throws IOException {
         String path = course.getPath();
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
+        URL resource = this.getClass().getClassLoader().getResource(path);
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(resource.getPath()))) {
             StringBuffer stringBuffer = new StringBuffer();
             String temp = null;
             while ((temp = bufferedReader.readLine())  != null) {

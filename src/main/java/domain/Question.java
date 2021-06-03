@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Question {
     private String type;
-    private List<List<String>> lists;
+    private List<List<String>> items;
 
     public String getType() {
         return type;
@@ -14,19 +14,19 @@ public class Question {
         this.type = type;
     }
 
-    public List<List<String>> getLists() {
-        return lists;
+    public List<List<String>> getItems() {
+        return items;
     }
 
-    public void setLists(List<List<String>> lists) {
-        this.lists = lists;
+    public void setItems(List<List<String>> items) {
+        this.items = items;
     }
 
     @Override
     public String toString() {
         return "Question{" +
                 "type='" + type + '\'' +
-                ", item=" + lists +
+                ", item=" + items +
                 '}';
     }
 }

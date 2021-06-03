@@ -29,7 +29,10 @@ public class UserDao extends AbstractDao {
         List<Map<String, String>> ret = new ArrayList<>();
         try {
             connection = DataBaseUtil.getConnection();
-            statement = connection.prepareStatement("SELECT coursename, score FROM (SELECT gc.`groupid`, gc.`courseid`, c.`coursename` FROM groupcourse gc, exam_course c WHERE gc.courseid=c.courseid AND gc.groupid=?) c2 LEFT JOIN (SELECT courseid, score FROM exam_score s WHERE s.userid=?) u ON c2.courseid=u.courseid");
+            statement = connection.prepareStatement("SELECT coursename, score FROM " +
+                    "(SELECT gc.`groupid`, gc.`courseid`, c.`coursename` FROM groupcourse gc, exam_course c WHERE gc.courseid=c.courseid AND gc.groupid=?) c2 " +
+                    "LEFT JOIN (SELECT courseid, score FROM exam_score s WHERE s.userid=?) u " +
+                    "ON c2.courseid=u.courseid");
             statement.setString(1, user.getGroupID());
             statement.setString(2, user.getUserID());
             ResultSet resultSet = statement.executeQuery();
@@ -86,7 +89,7 @@ public class UserDao extends AbstractDao {
             if (generatedKey.equals("")) {
                 throw new SQLException();
             } else {
-                return FactoryUtil.userFactor(generatedKey, username, password, groupid);
+                return FactoryUtil.userFactory(generatedKey, username, password, groupid);
             }
         } finally {
             DataBaseUtil.release(connection, statement, resultSet);

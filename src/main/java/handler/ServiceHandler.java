@@ -1,8 +1,10 @@
 package handler;
 
 import controller.CourseController;
+import controller.ScoreController;
 import controller.UserController;
 import dao.CourseDao;
+import domain.Score;
 import domain.User;
 import exception.LoginFailException;
 import org.apache.log4j.Logger;
@@ -84,11 +86,19 @@ public class ServiceHandler {
             }
         }
 
-        else if(Pattern.matches("^getquestions.*", command) && logined) {
+        else if (Pattern.matches("^getquestions.*", command) && logined) {
             CourseController courseController = new CourseController(socket);
             Matcher questionsMatcher = RegexUtil.getQuestionsMatcher(command);
             if (questionsMatcher.find()) {
                 courseController.getQuestions(questionsMatcher.group(1));
+            }
+        }
+
+        else if (Pattern.matches("^postscore.*", command) && logined) {
+            ScoreController scoreController = new ScoreController(socket);
+            Matcher postScoreMatcher = RegexUtil.getPostScoreMatcher(command);
+            if (postScoreMatcher.find()) {
+                scoreController.insertScore(user.getUserID(), postScoreMatcher.group(1), postScoreMatcher.group(2));
             }
         }
 

@@ -1,12 +1,22 @@
 package util;
 
 import domain.Course;
+import domain.Score;
 import domain.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FactoryUtil {
+
+    public static Score scoreFactory(String scoreID, String userID, String courseID, String score) {
+        Score score1 = new Score();
+        score1.setUserID(userID);
+        score1.setScoreID(scoreID);
+        score1.setCourseID(courseID);
+        score1.setScore(score);
+        return score1;
+    }
 
     public static User userFactory(ResultSet resultSet) throws SQLException {
         User user = new User();
@@ -19,7 +29,7 @@ public class FactoryUtil {
         return user;
     }
 
-    public static User userFactor(String userid, String username, String password, String groupid) {
+    public static User userFactory (String userid, String username, String password, String groupid) {
         User user = new User();
         user.setUserID(userid);
         user.setUserName(username);
