@@ -80,7 +80,8 @@ public class UserController {
         try {
             newUser = userDao.insertUser(username, password, groupname);
             if (newUser != null) {
-                ioHandler.writeln("R1" + newUser.getUserID());
+                ioHandler.writeln("R1");
+                ioHandler.writeln(newUser.getUserID());
                 return newUser;
             }
         } catch (SQLIntegrityConstraintViolationException e) {

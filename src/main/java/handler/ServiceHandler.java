@@ -42,7 +42,7 @@ public class ServiceHandler {
                     reuturnedUser = userController.socketLogin(loginMatcher.group(1), loginMatcher.group(2));
                 }
                 setUser(reuturnedUser);
-                System.err.println(reuturnedUser);
+                //System.err.println(reuturnedUser);
                 logined = true;
             } catch (IllegalStateException illegalStateException) {
                 ioHandler.writeln("FE");
@@ -116,7 +116,8 @@ public class ServiceHandler {
                 if(command.equals("")) {
                     continue;
                 }
-                System.err.println(command);
+                //System.err.println(command);
+                logger.info("命令为" + command);
                 stateMachine(command);
             } catch (IOException e) {
                 ioHandler.release();
