@@ -49,8 +49,19 @@ Java程序设计期末大作业，一个C/S做题系统后端
 * 命令格式`postscore 题库id 分数`
 * 成功返回IS1
 * 失败返回IS2
-## TODO
-* 管理员功能
-* 修改信息
-* 考试时间
-* 查看错题
+#### 新建班级
+* 命令格式`newgroupds groupname`
+* 成功返回`NG1`
+* 失败返回`NG2`
+#### 修改班级名称
+* 命令格式`changegroupname oldGroupID newGroupName`
+* 成功返回`CG1`
+* 失败返回`CG2`
+#### 获取班级里的用户
+* 命令格式`getusers groupid`
+* 成功返回`GU1 + list<user>(josn)`
+* 失败返回`GU2`
+#### 获取全部班级信息
+* 命令格式`getgroups`
+* 成功返回`GG1 + list<group>(json)`
+* 失败返回`GG2`

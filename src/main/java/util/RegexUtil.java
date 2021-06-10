@@ -9,12 +9,18 @@ public class RegexUtil {
     private static Pattern updatePasswordPattern;
     private static Pattern questionsPattern;
     private static Pattern postScorePattern;
+    private static Pattern newGroupPattern;
+    private static Pattern changeGroupNamePattern;
+    private static Pattern getUsersPattern;
     static {
         loginPattern = Pattern.compile("login\\s([^\\s]*)\\s([^\\s]*)");
         registerPattern = Pattern.compile("register\\s([^\\s]*)\\s([^\\s]*)\\s?([^\\s]*)?");
         updatePasswordPattern = Pattern.compile("updatepassword\\s([^\\s]*)\\s([^\\s]*)");
         questionsPattern = Pattern.compile("getquestion\\s([^\\s]*)");
         postScorePattern = Pattern.compile("postscore\\s([^\\s]*)\\s([^\\s]*)");
+        newGroupPattern = Pattern.compile("newgroup\\s([^\\s]*)");
+        changeGroupNamePattern = Pattern.compile("changegoupname\\s([^\\s]*)\\s([^\\s]*)");
+        getUsersPattern = Pattern.compile("getusers\\s([^\\s]*)");
     }
 
     public static Matcher getLoginMatcher(String string) {
@@ -36,4 +42,16 @@ public class RegexUtil {
     public static Matcher getPostScoreMatcher(String command) {
         return postScorePattern.matcher(command);
     }
+
+    public static Matcher getNewGroupMatcher(String command) { return newGroupPattern.matcher(command);
+    }
+
+    public static Matcher getchangeGroupNameMatcher(String command) {
+        return changeGroupNamePattern.matcher(command);
+    }
+
+    public static Matcher getGetUsersMatcher(String command) {
+        return getUsersPattern.matcher(command);
+    }
+
 }

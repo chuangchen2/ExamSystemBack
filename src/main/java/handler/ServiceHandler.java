@@ -1,19 +1,16 @@
 package handler;
 
 import controller.CourseController;
+import controller.GroupController;
 import controller.ScoreController;
 import controller.UserController;
-import dao.CourseDao;
-import domain.Score;
 import domain.User;
 import exception.LoginFailException;
 import org.apache.log4j.Logger;
 import util.RegexUtil;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,12 +68,12 @@ public class ServiceHandler {
             }
         }
 
-        else if(command.equals("getcourses") && user != null) {
+        else if (command.equals("getcourses") && user != null) {
             UserController userController = new UserController(socket);
             userController.socketGetCourses(user);
         }
 
-        else if(Pattern.matches("^updatepassword.*", command) && logined) {
+        else if (Pattern.matches("^updatepassword.*", command) && logined) {
             Matcher updatePasswordMatcher = RegexUtil.getUpdatePasswordMatcher(command);
             UserController userController = new UserController(socket);
             if (updatePasswordMatcher.find()) {
@@ -102,9 +99,38 @@ public class ServiceHandler {
             }
         }
 
+        else if (logined && user.getGroupID().equals("1") && Pattern.matches("^newgroup.*", command)) {
+            GroupController groupController = new GroupController(socket);
+            Matcher newGroupMatcher = RegexUtil.getNewGroupMatcher(command);
+            if (newGroupMatcher.find()) {
+                groupController.newGroup(newGroupMatcher.group(1));
+            }
+        }
+
+        else if (logined && user.getGroupID().equals("1") && Pattern.matches("^changegoupname.*", command)) {
+            GroupController groupController = new GroupController(socket);
+            Matcher changeGroupNameMatcher = RegexUtil.getchangeGroupNameMatcher(command);
+            if (changeGroupNameMatcher.find()) {
+                groupController.changeGroupName(changeGroupNameMatcher.group(1), changeGroupNameMatcher.group(2));
+            }
+        }
+
+        else if (logined && user.getGroupID().equals("1") && Pattern.matches("^getusers.*", command)) {
+            GroupController groupController = new GroupController(socket);
+            Matcher getUsersMatcher = RegexUtil.getGetUsersMatcher(command);
+            if (getUsersMatcher.find()) {
+                groupController.getUsers(getUsersMatcher.group(1));
+            }
+        }
+
+        else if (logined && user.getGroupID().equals("1") && Pattern.matches("^getgroups", command)) {
+            GroupController groupController = new GroupController(socket);
+            groupController.getGroups();
+        }
+
         else {
             ioHandler.writeln("FE");
-            logger.info("命令格式错误");
+            logger.info(user + command + " 命令格式错误或权限不足");
         }
     }
 
@@ -120,7 +146,9 @@ public class ServiceHandler {
                 logger.info("命令为" + command);
                 stateMachine(command);
             } catch (IOException e) {
+                logger.info(ioHandler.getOrgin().getLocalAddress() + " 连接已释放");
                 ioHandler.release();
+
                 break;
             }
         }

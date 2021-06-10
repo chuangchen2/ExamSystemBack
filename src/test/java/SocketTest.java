@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Map;
 import java.util.List;
+import java.util.Scanner;
 
 public class SocketTest {
 
@@ -24,8 +25,11 @@ public class SocketTest {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> maps = mapper.readValue(json, new TypeReference<Map<String, String>>() {
         });
-        String groupName = maps.get("groupName");
-        System.out.println(maps);
+        dataOutputStream.writeUTF("getgroups");
+        dataOutputStream.flush();
+        for (int i = 0; i < 2; i++) {
+            System.out.println(dataInputStream.readUTF());
+        }
         socket.close();
     }
 }

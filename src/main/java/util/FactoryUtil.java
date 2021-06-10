@@ -1,6 +1,7 @@
 package util;
 
 import domain.Course;
+import domain.Group;
 import domain.Score;
 import domain.User;
 
@@ -46,5 +47,12 @@ public class FactoryUtil {
             course.setPath(resultSet.getString(3));
         }
         return course;
+    }
+
+    public static Group groupFactory(String groupID, String groupName) {
+        Group group = new Group();
+        group.setGroupid(groupID);
+        group.setGroupname(groupName);
+        return group;
     }
 }

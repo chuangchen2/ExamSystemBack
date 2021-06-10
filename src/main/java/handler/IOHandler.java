@@ -21,6 +21,10 @@ public class IOHandler {
     private IOHandler() {
     }
 
+    public Socket getOrgin() {
+        return orgin;
+    }
+
     private IOHandler(Socket socket) {
         try {
             orgin = socket;
