@@ -59,13 +59,13 @@ public class GroupController {
         try {
             int i = groupDao.insertGroup(groupoName);
             if (i != 0) {
-                ioHandler.writeln("IG1");
+                ioHandler.writeln("NG1");
             } else {
-                ioHandler.writeln("IG2");
+                ioHandler.writeln("NG2");
             }
         } catch (SQLException e) {
             logger.error(e);
-            ioHandler.writeln("IG2");
+            ioHandler.writeln("NG2");
         }
     }
 

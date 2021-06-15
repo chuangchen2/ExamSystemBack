@@ -52,6 +52,7 @@ public class IOHandler {
     public void writeln(String string) {
         try {
             dataOutputStream.writeUTF(string);
+            logger.info(string);
             dataOutputStream.flush();
         } catch (IOException e) {
             logger.error(e);
@@ -62,6 +63,7 @@ public class IOHandler {
     public String readln() throws IOException {
         String readString = "";
         readString = dataInputStream.readUTF();
+        logger.info(readString);
         return readString;
     }
 
@@ -72,6 +74,7 @@ public class IOHandler {
             inputStream.close();
             dataOutputStream.close();
             outputStream.close();
+            orgin.close();
             socketPool.remove(this.orgin);
         } catch (IOException ex) {
             System.err.println("3");

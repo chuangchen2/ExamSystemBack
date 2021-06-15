@@ -56,7 +56,7 @@ public class ServiceHandler {
                 if (registerMatcher.find()) {
                     User returned = null;
                     if (registerMatcher.group(3).equals("")) {
-                        returned = userController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), "1");
+                        returned = userController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), "5");
                     } else {
                         returned = userController.socketRegister(registerMatcher.group(1), registerMatcher.group(2), registerMatcher.group(3));
                     }
@@ -107,7 +107,7 @@ public class ServiceHandler {
             }
         }
 
-        else if (logined && user.getGroupID().equals("1") && Pattern.matches("^changegoupname.*", command)) {
+        else if (logined && user.getGroupID().equals("1") && Pattern.matches("^changegroupname.*", command)) {
             GroupController groupController = new GroupController(socket);
             Matcher changeGroupNameMatcher = RegexUtil.getchangeGroupNameMatcher(command);
             if (changeGroupNameMatcher.find()) {
@@ -146,6 +146,7 @@ public class ServiceHandler {
                 logger.info("命令为" + command);
                 stateMachine(command);
             } catch (IOException e) {
+                //logger.info(e);
                 logger.info(ioHandler.getOrgin().getLocalAddress() + " 连接已释放");
                 ioHandler.release();
 

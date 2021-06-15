@@ -22,18 +22,17 @@ public class DataBaseUtil {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

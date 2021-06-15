@@ -29,7 +29,7 @@ public class UserDao extends AbstractDao {
         List<Map<String, String>> ret = new ArrayList<>();
         try {
             connection = DataBaseUtil.getConnection();
-            statement = connection.prepareStatement("SELECT coursename, score FROM " +
+            statement = connection.prepareStatement("SELECT c2.courseid, coursename, score FROM " +
                     "(SELECT gc.`groupid`, gc.`courseid`, c.`coursename` FROM groupcourse gc, exam_course c WHERE gc.courseid=c.courseid AND gc.groupid=?) c2 " +
                     "LEFT JOIN (SELECT courseid, score FROM exam_score s WHERE s.userid=?) u " +
                     "ON c2.courseid=u.courseid");
@@ -38,10 +38,11 @@ public class UserDao extends AbstractDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Map<String, String> item = new HashMap<>();
-                item.put("coursename", resultSet.getString(1));
+                item.put("courseid", resultSet.getString(1));
+                item.put("coursename", resultSet.getString(2));
                 if (resultSet.getString(2) != null) {
                     item.put("finished", "true");
-                    item.put("score", resultSet.getString(2));
+                    item.put("score", resultSet.getString(3));
                 } else {
                     item.put("finished", "false");
                     item.put("score", "-1");

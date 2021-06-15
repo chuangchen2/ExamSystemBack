@@ -16,10 +16,10 @@ public class RegexUtil {
         loginPattern = Pattern.compile("login\\s([^\\s]*)\\s([^\\s]*)");
         registerPattern = Pattern.compile("register\\s([^\\s]*)\\s([^\\s]*)\\s?([^\\s]*)?");
         updatePasswordPattern = Pattern.compile("updatepassword\\s([^\\s]*)\\s([^\\s]*)");
-        questionsPattern = Pattern.compile("getquestion\\s([^\\s]*)");
+        questionsPattern = Pattern.compile("getquestions\\s([^\\s]*)");
         postScorePattern = Pattern.compile("postscore\\s([^\\s]*)\\s([^\\s]*)");
         newGroupPattern = Pattern.compile("newgroup\\s([^\\s]*)");
-        changeGroupNamePattern = Pattern.compile("changegoupname\\s([^\\s]*)\\s([^\\s]*)");
+        changeGroupNamePattern = Pattern.compile("changegroupname\\s([^\\s]*)\\s([^\\s]*)");
         getUsersPattern = Pattern.compile("getusers\\s([^\\s]*)");
     }
 

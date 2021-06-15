@@ -26,6 +26,7 @@ Java程序设计期末大作业，一个C/S做题系统后端
 ```javascript
 [
     {
+        "courseid":"课程ID",
         "coursename":"课程名称",//(String),
         "finished":"是否完成",//(String),
         "score":"分数"//(String),
@@ -50,7 +51,7 @@ Java程序设计期末大作业，一个C/S做题系统后端
 * 成功返回IS1
 * 失败返回IS2
 #### 新建班级
-* 命令格式`newgroupds groupname`
+* 命令格式`newgroup groupname`
 * 成功返回`NG1`
 * 失败返回`NG2`
 #### 修改班级名称
